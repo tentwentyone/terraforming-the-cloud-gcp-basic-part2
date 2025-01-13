@@ -1,0 +1,1 @@
+export KUBECONFIG=$(pwd)/kubeconfig.yaml && gcloud container clusters get-credentials $(terraform output -raw gke_name) --zone $(terraform output -raw gke_location) --project $(terraform output -raw project_id)
