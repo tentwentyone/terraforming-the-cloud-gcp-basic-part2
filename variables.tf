@@ -19,13 +19,13 @@ variable "gke_location" {
 variable "dns_admin_serviceaccount" {
   description = "represents the service account that will be used to manage dns records"
   type        = string
-  default     = "dns-admin"
+  default     = "sa-gke-dns"
 }
 
 variable "dns_master_zone_name" {
   description = "The DNS master zone name for creating NS records."
   type        = string
-  default     = "dns-master-zone"
+  default     = "dns-lab-01-public"
 }
 
 variable "user_prefix" {
