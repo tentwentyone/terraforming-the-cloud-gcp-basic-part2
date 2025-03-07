@@ -17,7 +17,7 @@
 Certifica-te que tens a `google-cloud-shell` devidamente autorizada correndo este comando:
 
 ```bash
-gcloud config set project ten21-terraforming-p-154457 && gcloud config set accessibility/screen_reader false
+gcloud config set project tf-gke-lab-01-np-000001 && gcloud config set accessibility/screen_reader false
 ```
 
 De seguida, clica no botão **Start** para começares.
