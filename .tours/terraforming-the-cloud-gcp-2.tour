@@ -1,0 +1,214 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "terraforming-the-cloud-gcp-2",
+  "steps": [
+    {
+      "file": "tutorial.md",
+      "description": "Bem-vindo à segunda parte do nosso workshop!\n\nAqui tens um breve resumo dos conteúdos abordados neste módulo.\n\nAproveita para dar uma vista de olhos nos tópicos e verificar se tens todos os requisitos para prosseguir com o workshop.",
+      "line": 2
+    },
+    {
+      "file": "tutorial.md",
+      "description": "Certifica-te que estás no teu terminal fazendo o comando:\n- **ctrl+ç**\n\nAlternativamente, no canto superior esquerdo, podes também clicar em:\n\n- **View** e depois selecionar **Terminal**",
+      "line": 3
+    },
+    {
+      "file": "tutorial.md",
+      "description": "No terminal faz login em GCP utilizando o comando:\n>> gcloud auth login --update-adc --no-launch-browser",
+      "line": 4
+    },
+    {
+      "file": "tutorial.md",
+      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project tf-gke-lab-01-np-000001 && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
+      "line": 5
+    },
+    {
+      "file": "terraform.tfvars",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 3,
+          "character": 30
+        }
+      },
+      "description": "## 0. terraform init\n\nPara evitar que o terraform peça o nome do projeto a cada apply, podemos definir o nome do projeto por defeito:\n\n- Descomenta a linha **project_id** e adiciona o **id do projecto.**\n\nNeste projeto temos que preparar um prefixo que identifique unicamente os recursos que vão ser criados, por forma a evitar colisões.\n\n- Define um prefixo **user_prefix = \"valor\"**\n\nPara descomentar seleciona o bloco e faz o comando:\n\n- Windows: **CTRL + K + U**\n- Mac: **CMD + K + U**"
+    },
+    {
+      "file": "variables.tf",
+      "selection": {
+        "start": {
+          "line": 31,
+          "character": 1
+        },
+        "end": {
+          "line": 39,
+          "character": 2
+        }
+      },
+      "description": "💡Notem que a variavel **user_prefix** tem uma validação declarada no ficheiro *variables.tf*. Caso estejam a ter um erro, é preciso garantir queo nome escolhido cumpre com as regras de validação.\n\nInicializar:\n\n>> terraform init"
+    },
+    {
+      "file": "main.tf",
+      "description": "Planear:\n\n>> terraform plan -out plan.tfplan\n\nAplicar:\n\n>> terraform apply plan.tfplan",
+      "line": 28
+    },
+    {
+      "file": "vpc.tf",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 1
+        },
+        "end": {
+          "line": 51,
+          "character": 4
+        }
+      },
+      "description": "## 1. Criar VPC e Subnet\n\nNo ficheiro vpc.tf encontram-se as definições da VPC e respetiva subnet a usar\n\n👉 Descomentar as seguintes resources:\n\n*resource \"google_compute_network\" \"default\"*\n\n*resource \"google_compute_subnetwork\" \"gke\"*\n\n*resource \"google_compute_router\" \"default\"*\n\n*resource \"google_compute_router_nat\" \"default\"*\n\nPara descomentar seleciona o bloco e faz o comando:\n\n- Windows: **CTRL + K + U**\n- Mac: **CMD + K + U**\n\n💡**Why**: Tanto o router como o nat são recursos necessários para permitir que o cluster GKE possa aceder à internet para fazer download das imagens dos containers que vamos usar."
+    },
+    {
+      "file": "vpc.tf",
+      "description": "Executar o plan\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\nValidar the a VPC foi criada:\n\n>> gcloud compute networks list | grep $(terraform output -raw my_identifier)\n\nValidar que a subnet foi criada:\n\n>> gcloud compute networks subnets list | grep \"$(terraform output -raw my_identifier)\"",
+      "line": 52
+    },
+    {
+      "file": "modules/gke/gke.tf",
+      "description": "## 2. Modules & GKE\n\nNeste capitulo iremos abordar a utilização de terraform modules para instanciar o GKE.\n\n### 2.1 Introdução aos modulos\nExemplo demonstrativo da organização de modulos no slide 12 da apresentação.\n\nfrom docs: A module is a container for multiple resources that are used together.\n\nEvery Terraform configuration has at least one module, known as its root module, which consists of the resources defined in the .tf files in the main working directory.\n\nA module can call other modules, which lets you include the child module's resources into the configuration in a concise way. Modules can also be called multiple times, either within the same configuration or in separate configurations, allowing resource configurations to be packaged and re-used.",
+      "line": 1
+    },
+    {
+      "file": "gke.tf",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 16,
+          "character": 4
+        }
+      },
+      "description": "## 2.2 GKE module\n\nAgora que temos os pre-requisitos instalados, iremos entao proceder à primeira aplicação de um [terraform module](https://www.terraform.io/docs/language/modules/syntax.html) para aprovisionar um cluster GKE.\n\nNo ficheiro **./gke.tf** encontra-se a invocação do module\n\nPor cada module é preciso fazer **terraform init**\n\n👉 No ficheiro **./gke.tf**, descomentar as seguintes resources:\n\n*module \"gke\"*\n\n*output \"gke_name\"*\n\n*output \"gke_location\"*"
+    },
+    {
+      "file": "gke.tf",
+      "description": "Primeiro temos que executar **terraform init** para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\n⏰ Notem que a criação de um cluster GKE pode levar até 10 minutos...\n\nPodemos verificar que o nosso cluster foi corretamente criado através do comando:\n\n>> gcloud container clusters list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)",
+      "line": 15
+    },
+    {
+      "file": "gke.tf",
+      "description": "## 2.3 Aceder ao cluster\n\nO acesso a um GKE, tal como qualquer outro cluster de Kubernetes, é feito a partir da cli kubectl. Para podermos executar comandos kubectl precisamos primeiro de garantir que temos uma configuração válida para aceder ao nosso cluster.\n\nUsar o comando gcloud para construir um KUBECONFIG válido para aceder ao cluster:\n\n>> export KUBECONFIG=$(pwd)/kubeconfig.yaml && gcloud container clusters get-credentials $(terraform output -raw gke_name) --zone $(terraform output -raw gke_location) --project $(terraform output -raw project_id)\n\nVerificar o acesso ao cluster:\n\n>> kubectl get nodes",
+      "line": 16
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "## 2.4. Vamos por workloads a correr\n\nNesta secção abordar a utilização de um provider ([kubectl provider](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs)) para instanciar (via terraform) todos os workloads que vão correr no nosso cluster.\n\nTrata-se de um provider da comunidade que tal como o nome indica, facilita a utilização de terraform para orquestrar ficheiros yaml.",
+      "line": 1
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 14,
+          "character": 4
+        }
+      },
+      "description": "👉 Para habilitar o modulo, temos que ir ao ficheiro ./k8s.hipster.tf e descomentar o seguinte modulo:\n\n*module \"hipster\"*\n\n⛔ **não descomentar a linha fqdn; será habilitado mais a frente** ⛔\n\n💡Os microserviços utilizados nesta demo, encontram-se neste [registry](https://console.cloud.google.com/gcr/images/google-samples/global/microservices-demo) e o respetivo código [neste repositório de github](https://github.com/GoogleCloudPlatform/microservices-demo/tree/main).\n\nExecutar terraform init para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan & apply:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o plan & apply:\n\n>> terraform apply plan.tfplan\n\n⏰ Após o apply, pode demorar uns minutos a acabar o comando pois o terraform espera que os pods estejam em Running state."
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "Podemos verificar que os pods foram corretamente instanciados:\n\n>> kubectl get pods -n hipster-demo\n\nTambém podemos constatar que o cluster-autoscaler teve que aprovisionar mais nodes para acautelar o demand 😃🚀\n\n>> kubectl get nodes",
+      "line": 15
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "## 2.5. Testar a nossa aplicação\n\nPara testar e validar a nossa aplicação antes de a colocar em \"produção\", podemos tirar partido da capacidade de fazer port-forward.\n\nPara iniciar um port-forward no porto 8080:\n\n>> kubectl port-forward -n hipster-demo service/frontend 8080:80\n\n- Após este passo, basta testar a aplicação no port-foward que foi estabelecido no seguinte url: http://localhost:8080",
+      "line": 15
+    },
+    {
+      "file": "dns.tf",
+      "description": "## 3. DNS & HTTPS\n\nConseguimos validar que os workloads estao a funcionar.\n\n- O próximo passo será expor a partir dos ingresses e respectivos load-balancers do GKE\n\n- Para isso precisamos de um DNS para HTTP/HTTPS\n\n- Caso queiramos usar HTTPS vamos também precisar de um certificado SSL",
+      "line": 11
+    },
+    {
+      "file": "dns.tf",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 12,
+          "character": 1
+        }
+      },
+      "description": "## 3.1 Criar a zona de DNS\n\nNo ficheiro *./dns.tf* encontra-se a definição do modulo.\n\n👉 Para habilitar o modulo ./dns.tf precisamos de descomentar as seguintes resources:\n\n*module \"dns\"*\n\n*output \"fqdn\"*\n\nExecutar terraform init para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\nPodemos verificar que a nossa zona de DNS foi corretamente criada através do seguinte comando:\n\n>> gcloud dns managed-zones list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)"
+    },
+    {
+      "file": "k8s.external-dns.tf",
+      "description": "## 3.2 Habilitar o external-dns\n\nO external-dns é a cola entre o Kubernetes e o DNS.\n\nNo ficheiro é necessário passar o **fqdn** devolvido pelo modulo de dns.",
+      "line": 1
+    },
+    {
+      "file": "k8s.external-dns.tf",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 13,
+          "character": 1
+        }
+      },
+      "description": "👉 Descomentar o modulo **external_dns** no ficheiro **./k8s.external-dns.tf:**\n\n- *module \"external_dns\"*\n- *output \"fqdn\"*\n\nNa diretória *./modules/external-dns* encontra-se a implementação do modulo external-dns que permite atualizar os registos DNS automaticamente.\n\nExecutar o init pois estamos a introduzir um novo modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan"
+    },
+    {
+      "file": "k8s.external-dns.tf",
+      "description": "Podemos verificar a criação do external-dns pelo seguinte comando:\n\n>> kubectl get pods -n external-dns\n\nPodemos também investigar os logs emitidos pelo deployment:\n\n>> kubectl logs -n external-dns -l app=external-dns --follow",
+      "line": 12
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "## 3.3 Criar um ponto de entrada (ingress) para o site\n\n- A criação do ingress será o culminar das últimas operações que efectuamos (DNS + HTTPS).\n\n- Só será possivel aceder ao nosso site via internet se o expormos a partir de um ingress;\n\n- A criação do ingress irá despoletar a criação de um balanceador com um IP público bem como a geração de um certificado gerido pela Google;\n\n- Após a atribuição do IP, o external-dns irá atualizar o DNS com o respetivo IP;\n\n- Uma vez criado o registo no DNS, o GCE irá aprovisionar o certificado automaticamente;\n\n⏰ Todo o processo pode levar até cerca de 10 minutos a acontecer;",
+      "line": 1
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "selection": {
+        "start": {
+          "line": 8,
+          "character": 1
+        },
+        "end": {
+          "line": 9,
+          "character": 27
+        }
+      },
+      "description": "👉 No ficheiro **./k8s.hipster.tf** iremos descomentar a secção 3.3 onde iremos modificar o comportamento do modulo da seguinte forma:\n\nAtribuir o fqdn dado pelo modulo de dns á variável fqdn; o fqdn representa o domínio onde vai ser criado o host declarado pelo ingress.\n\n- **fqdn = module.dns.fqdn**\n\nAtivar a criação dos manifestos de ingress através da variável boleana ingress_enabled.\n\n- **ingress_enabled = true**"
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "Executar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\nPodemos verificar a criação do ingress e a respetiva atribuição de IP a partir dos seguintes comandos:\n\n>> kubectl get ingress -n hipster-demo\n\n>> kubectl describe ingress -n hipster-demo hipster-ingress",
+      "line": 7
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "Também podemos verificar a atuação do external-dns assim que o ingress ganhou um IP:\n\n>> kubectl logs -f -n external-dns -l app=external-dns\n\nOu então podemos verificar os registos no Cloud DNS:\n\n>> gcloud dns record-sets list --zone $(terraform output -raw my_identifier)-dns --project $(terraform output -raw project_id)\n\n🚀 Infelizmente, devido ao tempo que a Google demora a gerar os certificados, o site só estará disponível quando o certificado for gerado e a chain estiver devidamente validada. Este processo leva cerca de 10 minutos ⏰😡\n\nPodemos verificar o estado do mesmo usando o seguinte comando:\n\n>> kubectl describe managedcertificates -n hipster-demo hipster",
+      "line": 6
+    },
+    {
+      "file": "main.tf",
+      "description": "## 4. wrap-up & destroy\n\nPor fim, podemos destruir tudo de uma só vez.\n\n⏰ Notem que devido à quantidade de recursos envolvidos, a operação de destroy pode demorar entre 10 a 20 minutos.\n\n>> terraform destroy\n\n🔚🏁 Chegámos ao fim 🏁🔚",
+      "line": 55
+    }
+  ],
+  "ref": "main"
+}
