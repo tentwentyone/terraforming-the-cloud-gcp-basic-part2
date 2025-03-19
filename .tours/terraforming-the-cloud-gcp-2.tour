@@ -19,7 +19,7 @@
     },
     {
       "file": "tutorial.md",
-      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project \"project-name\" && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
+      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project ten21-wshop01-p-154457 && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
       "line": 5
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "file": "main.tf",
-      "description": "Planear:\n\n>> terraform plan -out plan.tfplan\n\nAplicar:\n\n>> terraform apply -out plan.tfplan",
+      "description": "Planear:\n\n>> terraform plan -out plan.tfplan\n\nAplicar:\n\n>> terraform apply plan.tfplan",
       "line": 28
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       "file": "vpc.tf",
-      "description": "Executar o plan\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply -out plan.tfplan\n\nValidar the a VPC foi criada:\n\n>> gcloud compute networks list | grep $(terraform output -raw my_identifier)\n\nValidar que a subnet foi criada:\n\n>> gcloud compute networks subnets list | grep \"$(terraform output -raw my_identifier)\"",
+      "description": "Executar o plan\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\nValidar the a VPC foi criada:\n\n>> gcloud compute networks list | grep $(terraform output -raw my_identifier)\n\nValidar que a subnet foi criada:\n\n>> gcloud compute networks subnets list | grep \"$(terraform output -raw my_identifier)\"",
       "line": 52
     },
     {
@@ -95,7 +95,7 @@
     },
     {
       "file": "gke.tf",
-      "description": "Primeiro temos que executar **terraform init** para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply -out plan.tfplan\n\n⏰ Notem que a criação de um cluster GKE pode levar até 10 minutos...\n\nPodemos verificar que o nosso cluster foi corretamente criado através do comando:\n\n>> gcloud container clusters list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)",
+      "description": "Primeiro temos que executar **terraform init** para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\n⏰ Notem que a criação de um cluster GKE pode levar até 10 minutos...\n\nPodemos verificar que o nosso cluster foi corretamente criado através do comando:\n\n>> gcloud container clusters list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)",
       "line": 15
     },
     {
@@ -144,7 +144,7 @@
           "character": 1
         }
       },
-      "description": "## 3.1 Criar a zona de DNS\n\nNo ficheiro *./dns.tf* encontra-se a definição do modulo.\n\n👉 Para habilitar o modulo ./dns.tf precisamos de descomentar as seguintes resources:\n\n*module \"dns\"*\n\n*output \"fqdn\"*\n\nExecutar terraform init para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply -out plan.tfplan\n\nPodemos verificar que a nossa zona de DNS foi corretamente criada através do seguinte comando:\n\n>> gcloud dns managed-zones list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)"
+      "description": "## 3.1 Criar a zona de DNS\n\nNo ficheiro *./dns.tf* encontra-se a definição do modulo.\n\n👉 Para habilitar o modulo ./dns.tf precisamos de descomentar as seguintes resources:\n\n*module \"dns\"*\n\n*output \"fqdn\"*\n\nExecutar terraform init para inicializar o modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\nPodemos verificar que a nossa zona de DNS foi corretamente criada através do seguinte comando:\n\n>> gcloud dns managed-zones list --project $(terraform output -raw project_id) | grep $(terraform output -raw my_identifier)"
     },
     {
       "file": "k8s.external-dns.tf",
@@ -163,7 +163,7 @@
           "character": 1
         }
       },
-      "description": "👉 Descomentar o modulo **external_dns** no ficheiro **./k8s.external-dns.tf:**\n\n- *module \"external_dns\"*\n- *output \"fqdn\"*\n\nNa diretória *./modules/external-dns* encontra-se a implementação do modulo external-dns que permite atualizar os registos DNS automaticamente.\n\nExecutar o init pois estamos a introduzir um novo modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply -out plan.tfplan"
+      "description": "👉 Descomentar o modulo **external_dns** no ficheiro **./k8s.external-dns.tf:**\n\n- *module \"external_dns\"*\n- *output \"fqdn\"*\n\nNa diretória *./modules/external-dns* encontra-se a implementação do modulo external-dns que permite atualizar os registos DNS automaticamente.\n\nExecutar o init pois estamos a introduzir um novo modulo:\n\n>> terraform init\n\nExecutar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan"
     },
     {
       "file": "k8s.external-dns.tf",
@@ -191,8 +191,13 @@
     },
     {
       "file": "k8s.hipster.tf",
-      "description": "Executar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply -out plan.tfplan\n\nPodemos verificar a criação do ingress e a respetiva atribuição de IP a partir dos seguintes comandos:\n\n>> kubectl get ingress -n hipster-demo\n\n>> kubectl describe ingress -n hipster-demo hipster-ingress\n\nTambém podemos verificar a atuação do external-dns assim que o ingress ganhou um IP:\n\n>> kubectl logs -f -n external-dns -l app=external-dns\n\nOu então podemos verificar os registos no Cloud DNS:\n\n>> gcloud dns record-sets list --zone $(terraform output -raw my_identifier)-dns --project $(terraform output -raw project_id)",
+      "description": "Executar o plan:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan",
       "line": 7
+    },
+    {
+      "file": "k8s.hipster.tf",
+      "description": "Podemos verificar a criação do ingress e a respetiva atribuição de IP a partir dos seguintes comandos:\n\n>> kubectl get ingress -n hipster-demo\n\n>> kubectl describe ingress -n hipster-demo hipster-ingress\n\nTambém podemos verificar a atuação do external-dns assim que o ingress ganhou um IP:\n\n>> kubectl logs -f -n external-dns -l app=external-dns\n\nOu então podemos verificar os registos no Cloud DNS:\n\n>> gcloud dns record-sets list --zone $(terraform output -raw my_identifier)-dns --project $(terraform output -raw project_id)",
+      "line": 8
     },
     {
       "file": "k8s.hipster.tf",
