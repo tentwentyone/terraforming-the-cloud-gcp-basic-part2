@@ -84,39 +84,85 @@ gcloud config set project <project-id> &&
 gcloud config set accessibility/screen_reader false
 ```
 
-## configurar o vscode
+## Pré-Config Vscode
+<!-- markdownlint-disable MD033 -->
+<details>
 
-> apenas válido para vscode em WSL (windows-subsystem-linux) - instalações em powershell não são suportadas
+<summary>Clicar para expandir</summary>
+<!-- markdownlint-enable MD033 -->
 
-Caso decidam usar o `vscode`, é necessário garantirem que têm os seguintes binários instalados.
-As instruções que seguem vão instalar as tools necessárias:
+Para iniciares o workshop terás de aceder ao teu workspace no Coder.
 
-1. terraform
-2. kubectl
-3. gcloud
+Será facultado um link assim como username e password para que possas fazer o login. Ao chegares a esta página utiliza as credenciais para entrares na plataforma.
+
+![alt text](/images/coder-login.png)
+
+Ao fazerem o login deverão encontrar um workspace já criado para o propósito do workshop semelhante a este:
+
+![alt text](/images/coder-workspaces.png)
+
+⚠️ Não criem um novo workspace.
+
+Ao acederem ao vosso workspace vão conseguir ver se este já se encontra disponível e se tal se verificar podem aceder ao `code-server`
+
+![alt text](/images/coder-server.png)
+
+</details>
+
+## Configurar o vscodeserver
+<!-- markdownlint-disable MD033 -->
+<details>
+
+<summary>Clicar para expandir</summary>
+<!-- markdownlint-enable MD033 -->
+
+Abre o terminal no vscode com o comando:
 
 ```bash
-# instalar as tools necessárias (podem skipar se já têm instaladas)
-sudo ./scripts/install-terraform.sh        # terraform
-sudo ./scripts/install-kubectl.sh          # kubectl
-curl https://sdk.cloud.google.com | bash   # gcloud
-
-# reinicializar a shell
-exec -l $SHELL
-
-# inicializar o cliente gcloud
-gcloud init
-gcloud auth application-default login
-
-# definir o projeto por defeito (opcional)
-gcloud config set project <project-id>
+ctrl+ç
 ```
 
-Por fim, podemos clonar o projeto:
+ou se estiveres num mac:
 
 ```bash
-git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part2.git && cd terraforming-the-cloud-gcp-basic-part2
+shift+cmd+c
 ```
+
+Faz git clone do repositório:
+
+```bash
+git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part2.git
+```
+
+Abre a diretoria com o comando:
+
+```bash
+ctrl+k+ctrl+o
+```
+
+ou se estiveres num mac:
+
+```bash
+cmd+k+cmd+o
+```
+
+Abre a diretoria do projecto:
+
+```bash
+cd terraforming-the-cloud-gcp-basic-part2/
+```
+
+Seleciona o path para o codetour:
+
+```bash
+/home/coder/terraforming-the-cloud-gcp-basic-part2
+```
+
+Inicia o tour no canto inferior esquerdo do teu Visual Studio Code:
+
+![alt text](images/codetour.png)
+
+</details>
 
 ## Comandos úteis
 
