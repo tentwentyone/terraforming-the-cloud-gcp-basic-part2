@@ -76,7 +76,7 @@
     },
     {
       "file": "modules/gke/gke.tf",
-      "description": "## 2. Modules & GKE\n\nNeste capitulo iremos abordar a utilização de terraform modules para instanciar o GKE.\n\n### 2.1 Introdução aos modulos\nExemplo demonstrativo da organização de modulos no slide 12 da apresentação.\n\nfrom docs: A module is a container for multiple resources that are used together.\n\nEvery Terraform configuration has at least one module, known as its root module, which consists of the resources defined in the .tf files in the main working directory.\n\nA module can call other modules, which lets you include the child module's resources into the configuration in a concise way. Modules can also be called multiple times, either within the same configuration or in separate configurations, allowing resource configurations to be packaged and re-used.",
+      "description": "## 2. Modules & GKE\n\nNeste capitulo iremos abordar a utilização de terraform modules para instanciar o GKE.\n\n### 2.1 Introdução aos modulos\nExemplo demonstrativo da organização de modulos no slide 12 da apresentação.\n\nfrom docs: Um módulo é um \"contentor\" para múltiplos recursos que são utilizados em conjunto.\n\nCada configuração do Terraform tem pelo menos um módulo, conhecido como o seu módulo raiz, que consiste nos recursos definidos nos ficheiros .tf no diretório principal de trabalho.\n\nUm módulo pode chamar outros módulos, o que permite incluir os recursos do módulo \"filho\" na configuração de forma concisa. Os módulos também podem ser chamados várias vezes, seja na mesma configuração ou em configurações separadas, permitindo que as configurações de recursos sejam empacotadas e reutilizadas.",
       "line": 1
     },
     {
@@ -124,7 +124,7 @@
     },
     {
       "file": "k8s.hipster.tf",
-      "description": "Podemos verificar que os pods foram corretamente instanciados:\n\n>> kubectl get pods -n hipster-demo\n\nTambém podemos constatar que o cluster-autoscaler teve que aprovisionar mais nodes para acautelar o demand 😃🚀\n\n>> kubectl get nodes\n\n## 2.5. Testar a nossa aplicação\n\nPara testar e validar a nossa aplicação antes de a colocar em \"produção\", podemos tirar partido da capacidade de fazer port-forward.\n\nPara iniciar um port-forward no porto 8080:\n\n>> kubectl port-forward -n hipster-demo service/frontend 8080:80\n\n- Após este passo, basta testar a aplicação no port-foward que foi estabelecido no seguinte url: http://localhost:8080\n\n- Se estiverem a usar a Google CloudShell podem clicar em **Preview on Port 8080** no canto superior direito.",
+      "description": "Podemos verificar que os pods foram corretamente instanciados:\n\n>> kubectl get pods -n hipster-demo\n\nTambém podemos constatar que o cluster-autoscaler teve que aprovisionar mais nodes para acautelar o demand 😃🚀\n\n>> kubectl get nodes\n\n## 2.5. Testar a nossa aplicação\n\nPara testar e validar a nossa aplicação antes de a colocar em \"produção\", podemos tirar partido da capacidade de fazer port-forward.\n\nPara iniciar um port-forward no porto 8080:\n\n>> kubectl port-forward -n hipster-demo service/frontend 8080:80\n\n- Após este passo, basta testar a aplicação no port-foward que foi estabelecido no seguinte url: http://localhost:8080",
       "line": 15
     },
     {
