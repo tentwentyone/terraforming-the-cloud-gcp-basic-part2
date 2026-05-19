@@ -51,8 +51,8 @@ resource "google_project_iam_member" "dns_admin_sa" {
   ]
 }
 
-resource "google_service_account_iam_member" "external_dns" {
-  service_account_id = google_service_account.dns_admin.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${data.google_project.this.project_id}.svc.id.goog[external-dns/external-dns]"
-}
+# resource "google_service_account_iam_member" "external_dns" {
+#   service_account_id = google_service_account.dns_admin.name
+#   role               = "roles/iam.workloadIdentityUser"
+#   member             = "serviceAccount:${data.google_project.this.project_id}.svc.id.goog[external-dns/external-dns]"
+# }
