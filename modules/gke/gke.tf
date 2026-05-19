@@ -3,7 +3,7 @@ locals {
     cluster_name       = "${var.prefix}-gke"
     location           = var.location
     release_channel    = "REGULAR"
-    min_master_version = "1.31"
+    min_master_version = "1.35"
     network            = data.google_compute_subnetwork.gke.network
     subnetwork         = data.google_compute_subnetwork.gke.self_link
   }
