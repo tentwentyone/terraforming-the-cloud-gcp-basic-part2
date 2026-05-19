@@ -1,8 +1,6 @@
-resource "google_dns_managed_zone" "master" {
-  name          = "dns-master-zone"
-  dns_name      = "${var.master_zone_dns_name}."
-  description   = "Master zone (managed by terraform)"
-  force_destroy = true
+data "google_dns_managed_zone" "master" {
+  name    = var.master_zone_dns_name
+  project = var.project_id
 }
 
 resource "google_service_account" "dns_admin" {

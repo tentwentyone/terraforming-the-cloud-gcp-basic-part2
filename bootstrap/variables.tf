@@ -17,7 +17,7 @@ variable "gcp_trainer_group" {
 }
 
 variable "master_zone_dns_name" {
-  description = "The DNS name of the master zone."
+  description = "The name of the existing master DNS managed zone."
   type        = string
-  default     = "terraforming.cg.tentwentyone.io"
+  default     = "tto-workshops-lab-public"
 }
